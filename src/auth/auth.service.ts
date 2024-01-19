@@ -11,14 +11,6 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  private async addJwt(user: Omit<User, 'password'>) {
-    const payload = { username: user.email, sub: user.id };
-    return {
-      user,
-      token: this.jwtService.sign(payload)
-    };
-  }
-
   private purgeUser(user: User): Omit<User, 'password'> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...purgedUser } = user;
@@ -29,7 +21,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(email);
 
     if (user && user.password === password) {
-      return this.addJwt(this.purgeUser(user));
+      return this.purgeUser(user);
     }
 
     return null;
@@ -45,5 +37,13 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  async login(user: Omit<User, 'password'>) {
+    const payload = { username: user.email, sub: user.id };
+    return {
+      user,
+      token: this.jwtService.sign(payload)
+    };
   }
 }

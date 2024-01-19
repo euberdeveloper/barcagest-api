@@ -8,6 +8,7 @@ import { HttpUsersModule } from './users/http-users.module';
 import { TypeOrmFilter } from './filters/typeorm.filter';
 import { HttpAuthModule } from './auth/http-auth.module';
 import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AuthController } from './auth/auth.controller';
       synchronize: true,
       autoLoadEntities: true
     }),
+    AuthModule,
     HttpUsersModule,
     HttpAuthModule
   ],
