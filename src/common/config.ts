@@ -12,6 +12,13 @@ const config = {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DATABASE
+  },
+  security: {
+    jwt: {
+      secret: process.env.SECURITY_JWT_SECRET,
+      expiresIn: process.env.SECURITY_JWT_EXPIRES_IN,
+      issuer: process.env.SECURITY_JWT_ISSUER
+    }
   }
 };
 
