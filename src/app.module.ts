@@ -6,6 +6,8 @@ import config from './common/config';
 
 import { HttpUsersModule } from './users/http-users.module';
 import { TypeOrmFilter } from './filters/typeorm.filter';
+import { HttpAuthModule } from './auth/http-auth.module';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -19,13 +21,15 @@ import { TypeOrmFilter } from './filters/typeorm.filter';
       synchronize: true,
       autoLoadEntities: true
     }),
-    HttpUsersModule
+    HttpUsersModule,
+    HttpAuthModule
   ],
   providers: [
     {
       provide: APP_FILTER,
       useClass: TypeOrmFilter
     }
-  ]
+  ],
+  controllers: [AuthController]
 })
 export class AppModule {}
