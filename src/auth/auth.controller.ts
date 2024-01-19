@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request as ExpressRequest } from 'express';
 
 import { AuthService } from './auth.service';
-import { User } from '../users/entities/user.entity';
+import { PurgedUser } from 'src/users/interfaces/user.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +12,7 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req: ExpressRequest) {
-    return this.authService.login(req.user as Omit<User, 'password'>);
+    return this.authService.login(req.user as PurgedUser);
   }
 
   @UseGuards(AuthGuard('jwt'))

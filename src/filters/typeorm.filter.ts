@@ -19,6 +19,8 @@ export class TypeOrmFilter implements ExceptionFilter {
       description: `[${code}] ${detail}`
     });
 
+    console.error(exception);
+
     response
       .status(badRequestError.getStatus())
       .json(badRequestError.getResponse());

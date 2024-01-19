@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/user.entity';
+import { PurgedUser } from 'src/users/interfaces/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -11,35 +11,27 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  private purgeUser(user: User): Omit<User, 'password'> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...purgedUser } = user;
-    return purgedUser;
-  }
-
   async validateUserLocal(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
-
-    if (user && user.password === password) {
-      return this.purgeUser(user);
+    const user = await this.usersService.findByCredentials(email, password);
+    if (user) {
+      return user;
     }
-
     return null;
   }
 
-  async validateUserJwt(payload: any): Promise<Omit<User, 'password'> | null> {
+  async validateUserJwt(payload: any): Promise<PurgedUser | null> {
     const id = payload.sub;
     const email = payload.username;
     const user = await this.usersService.findById(id);
 
     if (user && user.email === email) {
-      return this.purgeUser(user);
+      return user;
     }
 
     return null;
   }
 
-  async login(user: Omit<User, 'password'>) {
+  async login(user: PurgedUser) {
     const payload = { username: user.email, sub: user.id };
     return {
       user,

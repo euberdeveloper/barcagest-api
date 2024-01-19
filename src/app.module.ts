@@ -9,6 +9,7 @@ import { TypeOrmFilter } from './filters/typeorm.filter';
 import { HttpAuthModule } from './auth/http-auth.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { HttpRolesModule } from './roles/http-roles.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     AuthModule,
     HttpUsersModule,
-    HttpAuthModule
+    HttpAuthModule,
+    HttpRolesModule
   ],
   providers: [
     {

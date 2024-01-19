@@ -1,4 +1,11 @@
-import { IsEmail, IsNotEmpty, MaxLength, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  MaxLength,
+  Length,
+  IsEnum
+} from 'class-validator';
+import { RoleType } from 'src/roles/entities/role.entity';
 
 export class CreateUserDto {
   @IsEmail()
@@ -8,4 +15,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Length(8, 16)
   readonly password: string;
+
+  @IsNotEmpty()
+  @IsEnum(Object.values(RoleType))
+  readonly role: RoleType;
 }
