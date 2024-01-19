@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import config from './common/config';
@@ -10,6 +10,8 @@ import { HttpAuthModule } from './auth/http-auth.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { HttpRolesModule } from './roles/http-roles.module';
+import { JwtAuthGuard } from './auth/guards/jwt.guard';
+import { RolesGuard } from './auth/guards/roles.guard';
 
 @Module({
   imports: [
@@ -32,6 +34,14 @@ import { HttpRolesModule } from './roles/http-roles.module';
     {
       provide: APP_FILTER,
       useClass: TypeOrmFilter
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard
     }
   ],
   controllers: [AuthController]
