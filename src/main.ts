@@ -18,7 +18,6 @@ async function bootstrap() {
     .setTitle('Barcagest API')
     .setDescription('The Barcagest API')
     .setVersion(packageJson.version)
-    .addTag('barcagest')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);

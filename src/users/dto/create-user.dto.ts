@@ -19,7 +19,7 @@ export class CreateUserDto {
   @Length(8, 16)
   readonly password: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: Object.values(RoleType) })
   @IsNotEmpty()
   @IsEnum(Object.values(RoleType))
   readonly role: RoleType;
