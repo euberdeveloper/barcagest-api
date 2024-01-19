@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { HttpRolesModule } from './roles/http-roles.module';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { HttpCustomersModule } from './customers/http-customers.controller';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { RolesGuard } from './auth/guards/roles.guard';
     AuthModule,
     HttpUsersModule,
     HttpAuthModule,
-    HttpRolesModule
+    HttpRolesModule,
+    HttpCustomersModule
   ],
   providers: [
     {
