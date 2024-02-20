@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
     IsDate,
+    IsDefined,
     IsNotEmpty,
     IsNumber,
     IsOptional,
@@ -36,13 +37,13 @@ export class CreateParkingDto {
 
     @Transform(({ value }) => new Date(value))
     @IsDate()
-    @IsNotEmpty()
+    @IsDefined()
     @ApiProperty({ description: 'Time is ignored' })
     startDate: Date;
 
     @Transform(({ value }) => new Date(value))
     @IsDate()
-    @IsNotEmpty()
+    @IsOptional()
     @ApiProperty({
         required: false,
         type: Date,
@@ -52,7 +53,7 @@ export class CreateParkingDto {
 
     @Transform(({ value }) => new Date(value))
     @IsDate()
-    @IsNotEmpty()
+    @IsOptional()
     @ApiProperty({
         required: false,
         type: Date,
@@ -62,7 +63,7 @@ export class CreateParkingDto {
 
     @Transform(({ value }) => new Date(value))
     @IsDate()
-    @IsNotEmpty()
+    @IsOptional()
     @ApiProperty({
         required: false,
         type: Date,
@@ -76,12 +77,12 @@ export class CreateParkingDto {
     contractNumber?: string;
 
     @IsNumber()
-    @IsNotEmpty()
+    @IsOptional()
     @ApiProperty()
     price?: number;
 
     @IsNumber()
-    @IsNotEmpty()
+    @IsDefined()
     @ApiProperty()
     customerId: number;
 
