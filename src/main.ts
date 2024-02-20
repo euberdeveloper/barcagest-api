@@ -1,27 +1,19 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import helmet from 'helmet';
-
-import * as packageJson from '../package.json';
-
-import config from './common/config';
-
 import { AppModule } from './app.module';
 
+import { setupSwagger } from './swagger.setup';
+import { setupPrettyJson } from './pretty.setup';
+import { setupValidation } from './validation.setup';
+import { setupErrorsHandler } from './errors-handler.setup';
+import { setupSerialization } from './serialization.setup';
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
-  app.useGlobalPipes(new ValidationPipe());
-  app.use(helmet());
-
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Barcagest API')
-    .setDescription('The Barcagest API')
-    .setVersion(packageJson.version)
-    .build();
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
-
-  await app.listen(config.server.port);
+    const app = await NestFactory.create(AppModule);
+    setupValidation(app);
+    setupSwagger(app);
+    setupSerialization(app);
+    setupPrettyJson(app);
+    setupErrorsHandler(app);
+    await app.listen(3000);
 }
 bootstrap();

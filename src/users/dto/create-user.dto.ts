@@ -1,26 +1,32 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsEmail,
-  IsNotEmpty,
-  MaxLength,
-  Length,
-  IsEnum
+    IsEmail,
+    IsEnum,
+    IsNotEmpty,
+    IsString,
+    IsStrongPassword,
+    MaxLength
 } from 'class-validator';
-import { RoleType } from 'src/roles/entities/role.entity';
+import { RoleName } from 'src/roles/entities/role.entity';
 
 export class CreateUserDto {
-  @ApiProperty()
-  @IsEmail()
-  @MaxLength(320)
-  readonly email: string;
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty()
+    fullname: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @Length(8, 16)
-  readonly password: string;
+    @IsEmail()
+    @ApiProperty()
+    email: string;
 
-  @ApiProperty({ enum: Object.values(RoleType) })
-  @IsNotEmpty()
-  @IsEnum(Object.values(RoleType))
-  readonly role: RoleType;
+    @IsStrongPassword({
+        minLength: 8
+    })
+    @MaxLength(24)
+    @ApiProperty()
+    password: string;
+
+    @IsEnum(RoleName)
+    @ApiProperty({ enum: RoleName })
+    role: RoleName;
 }

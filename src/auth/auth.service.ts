@@ -1,41 +1,57 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
-import { UsersService } from '../users/users.service';
-import { PurgedUser } from 'src/users/interfaces/user.interface';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { JwtBody, JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService
-  ) {}
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly jwtService: JwtService
+    ) {}
 
-  async validateUserLocal(email: string, password: string) {
-    const user = await this.usersService.findByCredentials(email, password);
-    if (user) {
-      return user;
+    async validateUserLocal(
+        email: string,
+        password: string
+    ): Promise<UserEntity> {
+        const user = await this.prisma.user.findUnique({
+            where: { email, password },
+            include: { role: true }
+        });
+
+        if (!user) {
+            throw new UnauthorizedException('Invalid email or password');
+        }
+
+        return new UserEntity(user);
     }
-    return null;
-  }
 
-  async validateUserJwt(payload: any): Promise<PurgedUser | null> {
-    const id = payload.sub;
-    const email = payload.username;
-    const user = await this.usersService.findById(id);
+    async validateUserJwt(payload: JwtBody): Promise<UserEntity> {
+        const id = +payload.sub;
+        const email = payload.email;
+        const user = await this.prisma.user.findUnique({
+            where: { id, email },
+            include: { role: true }
+        });
 
-    if (user && user.email === email) {
-      return user;
+        if (!user) {
+            throw new UnauthorizedException();
+        }
+
+        return new UserEntity(user);
     }
 
-    return null;
-  }
+    async login(user: UserEntity) {
+        return {
+            user,
+            token: this.jwtService.sign({ email: user.email } as JwtPayload, {
+                subject: user.id.toString()
+            })
+        };
+    }
 
-  async login(user: PurgedUser) {
-    const payload = { username: user.email, sub: user.id };
-    return {
-      user,
-      token: this.jwtService.sign(payload)
-    };
-  }
+    async me(user: UserEntity) {
+        return user;
+    }
 }

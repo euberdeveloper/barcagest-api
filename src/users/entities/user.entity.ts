@@ -1,17 +1,53 @@
-import { Role } from 'src/roles/entities/role.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import { Exclude } from 'class-transformer';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+import { RoleName } from 'src/roles/entities/role.entity';
+import { RawUserEntity } from './raw-user.entity';
 
-  @Column({ length: 320, unique: true })
-  email: string;
+export class UserEntity implements User {
+    @ApiProperty()
+    id: number;
 
-  @Column({ length: 16 })
-  password: string;
+    @ApiProperty()
+    fullname: string;
 
-  @ManyToOne(() => Role, (role) => role.users)
-  role: Role;
+    @ApiProperty()
+    email: string;
+
+    @ApiProperty()
+    createdAt: Date;
+
+    @ApiProperty()
+    updatedAt: Date;
+
+    @ApiProperty()
+    roleId: number;
+
+    @ApiProperty({ enum: RoleName })
+    role: string;
+
+    @Exclude()
+    password: string;
+
+    constructor({
+        id,
+        fullname,
+        email,
+        createdAt,
+        updatedAt,
+        role
+    }: Partial<RawUserEntity | UserEntity>) {
+        Object.assign(this, {
+            id,
+            fullname,
+            email,
+            createdAt,
+            updatedAt
+        });
+
+        if (role) {
+            this.role = typeof role === 'string' ? role : role.name;
+        }
+    }
 }

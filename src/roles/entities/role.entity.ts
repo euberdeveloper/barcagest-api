@@ -1,20 +1,26 @@
-import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
 
-export enum RoleType {
-  ROOT = 'root',
-  ADMIN = 'admin',
-  STANDARD = 'standard'
+export enum RoleName {
+    ROOT = 'root',
+    ADMIN = 'admin',
+    USER = 'user'
 }
 
-@Entity()
-export class Role {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class RoleEntity implements Role {
+    constructor(partial: Partial<RoleEntity>) {
+        Object.assign(this, partial);
+    }
 
-  @Column({ unique: true })
-  role: RoleType;
+    @ApiProperty()
+    id: number;
 
-  @OneToMany(() => User, (user) => user.role)
-  users: User[];
+    @ApiProperty({ enum: RoleName })
+    name: string;
+
+    @ApiProperty()
+    createdAt: Date;
+
+    @ApiProperty()
+    updatedAt: Date;
 }

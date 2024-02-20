@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Park {
+  id Int @id @default(autoincrement())
+
+  vehicleType      String @map("vehicle_type")
+  vehicleBrand     String @map("vehicle_brand")
+  vehiclePlate     String @map("vehicle_plate")
+  registrationYear Int    @map("registration_year")
+  sizeInMeters     Float  @map("size_in_meters")
+
+  startDate DateTime  @map("start_date")
+  endDate   DateTime? @map("end_date")
+  checkIn   DateTime? @map("check_in")
+  checkOut  DateTime? @map("check_out")
+
+  contractNumber String? @map("contract_number")
+  price          Decimal @db.Decimal(9, 2)
+
+  notes String?
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @map("customer_id")
+
+  @@map("park")
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+
+  name      String
+  surname   String
+  birthdate DateTime
+
+  birthPlace       String? @map("birth_place")
+  residenceStreet  String? @map("residence_street")
+  residenceCity    String? @map("residence_city")
+  residenceZip     String? @map("residence_zip")
+  residenceCountry String? @map("residence_country")
+
+  phoneNumber String? @map("phone_number")
+  email       String?
+  ssn         String?
+  idCardCode  String? @map("id_card_code")
+
+  notes String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Park Park[]
+
+  @@unique([name, surname, birthdate])
+  @@map("customer")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  fullname  String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  role   Role @relation(fields: [roleId], references: [id])
+  roleId Int  @map("role_id")
+
+  @@map("user")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  users User[]
+
+  @@map("role")
+}
