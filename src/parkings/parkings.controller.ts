@@ -27,7 +27,6 @@ import { ParkingEntity } from './entities/parking.entity';
 import { ParkingsService } from './parkings.service';
 import { RoleName } from 'src/roles/entities/role.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('parkings')
 @ApiTags('parkings')
@@ -35,7 +34,7 @@ export class ParkingsController {
     constructor(private readonly parkingsService: ParkingsService) {}
 
     @Get()
-    @Public()
+    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get all parkings' })
     @ApiOkResponse({ type: [ParkingEntity] })
     async findPublished(): Promise<ParkingEntity[]> {
