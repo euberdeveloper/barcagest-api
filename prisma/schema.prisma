@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
-  output = "../node_modules/.prisma/client" // Fix for pnpm, to save .prisma directly under node_modules
+  // Fix for pnpm, to save .prisma directly under node_modules
+  output = "../node_modules/.prisma/client" 
 }
 
 datasource db {
