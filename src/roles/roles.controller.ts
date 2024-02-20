@@ -21,7 +21,8 @@ import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { ReplaceRoleDto } from './dto/replace-role.dto';
-import { RoleEntity } from './entities/role.entity';
+import { RoleEntity, RoleName } from './entities/role.entity';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @ApiTags('roles')
 @Controller('roles')
@@ -53,6 +54,7 @@ export class RolesController {
     }
 
     @Post()
+    @Roles(RoleName.ROOT)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Creates a new role' })
     @ApiCreatedResponse({ type: RoleEntity })
@@ -61,6 +63,7 @@ export class RolesController {
     }
 
     @Put(':id')
+    @Roles(RoleName.ROOT)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Replaces the role with specified id' })
     @ApiOkResponse({ type: RoleEntity })
@@ -69,6 +72,7 @@ export class RolesController {
     }
 
     @Put('name/:name')
+    @Roles(RoleName.ROOT)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Replaces the role with specified name' })
     @ApiOkResponse({ type: RoleEntity })
@@ -80,6 +84,7 @@ export class RolesController {
     }
 
     @Patch(':id')
+    @Roles(RoleName.ROOT)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Updates the role with specified id' })
     @ApiOkResponse({ type: RoleEntity })
@@ -88,6 +93,7 @@ export class RolesController {
     }
 
     @Patch('name/:name')
+    @Roles(RoleName.ROOT)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Updates the role with specified name' })
     @ApiOkResponse({ type: RoleEntity })
@@ -99,6 +105,7 @@ export class RolesController {
     }
 
     @Delete(':id')
+    @Roles(RoleName.ROOT)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Removes the role with specified id' })
     @ApiNoContentResponse()
@@ -107,6 +114,7 @@ export class RolesController {
     }
 
     @Delete('name/:name')
+    @Roles(RoleName.ROOT)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Removes the role with specified name' })
     @ApiNoContentResponse()
