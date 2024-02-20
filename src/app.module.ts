@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
 import { CustomersModule } from './customers/customers.module';
+import { ParkingsModule } from './parkings/parkings.module';
 
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { AuthorizationGuard } from './auth/guards/authorization.guard';
@@ -18,7 +19,8 @@ import { AuthorizationGuard } from './auth/guards/authorization.guard';
         AuthModule,
         RolesModule,
         UsersModule,
-        CustomersModule
+        CustomersModule,
+        ParkingsModule
     ],
     providers: [
         {
