@@ -23,8 +23,8 @@ model Parking {
   checkIn   DateTime? @map("check_in")
   checkOut  DateTime? @map("check_out")
 
-  contractNumber String? @map("contract_number")
-  price          Decimal @db.Decimal(9, 2)
+  contractNumber String?  @map("contract_number")
+  price          Decimal? @db.Decimal(9, 2)
 
   notes String?
 
