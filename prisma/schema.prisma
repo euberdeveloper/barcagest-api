@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Park {
+model Parking {
   id Int @id @default(autoincrement())
 
   vehicleType      String @map("vehicle_type")
@@ -29,7 +29,7 @@ model Park {
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @map("customer_id")
 
-  @@map("park")
+  @@map("parking")
 }
 
 model Customer {
@@ -55,7 +55,7 @@ model Customer {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  Park Park[]
+  Park Parking[]
 
   @@unique([name, surname, birthDate])
   @@map("customer")
