@@ -39,9 +39,7 @@ export class CustomersController {
     @Public()
     @ApiOperation({ summary: 'Get all customers' })
     @ApiOkResponse({ type: [CustomerEntity] })
-    async findPublished(
-        
-    ): Promise<CustomerEntity[]> {
+    async findPublished(): Promise<CustomerEntity[]> {
         const customers = await this.customersService.findAll();
         return customers.map((customer) => new CustomerEntity(customer));
     }
@@ -50,10 +48,7 @@ export class CustomersController {
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Gets the customer with the specified id' })
     @ApiOkResponse({ type: CustomerEntity })
-    async findOne(
-        @Param('id') id: number,
-        
-    ): Promise<CustomerEntity> {
+    async findOne(@Param('id') id: number): Promise<CustomerEntity> {
         return new CustomerEntity(await this.customersService.findOne(id));
     }
 
@@ -62,8 +57,7 @@ export class CustomersController {
     @ApiOperation({ summary: 'Creates a new customer' })
     @ApiCreatedResponse({ type: CustomerEntity })
     async create(
-        @Body() createCustomerDto: CreateCustomerDto,
-        
+        @Body() createCustomerDto: CreateCustomerDto
     ): Promise<CustomerEntity> {
         return new CustomerEntity(
             await this.customersService.create(createCustomerDto)
@@ -77,8 +71,7 @@ export class CustomersController {
     @ApiOkResponse({ type: CustomerEntity })
     async replace(
         @Param('id') id: number,
-        @Body() replaceCustomerDto: ReplaceCustomerDto,
-        
+        @Body() replaceCustomerDto: ReplaceCustomerDto
     ): Promise<CustomerEntity> {
         return new CustomerEntity(
             await this.customersService.replace(id, replaceCustomerDto)
@@ -92,8 +85,7 @@ export class CustomersController {
     @ApiOkResponse({ type: CustomerEntity })
     async update(
         @Param('id') id: number,
-        @Body() updateCustomerDto: UpdateCustomerDto,
-        
+        @Body() updateCustomerDto: UpdateCustomerDto
     ): Promise<CustomerEntity> {
         return new CustomerEntity(
             await this.customersService.update(id, updateCustomerDto)

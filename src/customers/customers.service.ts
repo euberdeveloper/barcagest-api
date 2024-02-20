@@ -14,38 +14,26 @@ export class CustomersService {
         return this.prisma.customer.findMany();
     }
 
-  
     findOne(id: number) {
         return this.prisma.customer.findUniqueOrThrow({
             where: { id }
         });
     }
 
-    create(
-        createCustomerDto: CreateCustomerDto,
-        
-    ) {
+    create(createCustomerDto: CreateCustomerDto) {
         return this.prisma.customer.create({
             data: createCustomerDto
         });
     }
 
-    replace(
-        id: number,
-        replaceCustomerDto: ReplaceCustomerDto,
-        
-    ) {
+    replace(id: number, replaceCustomerDto: ReplaceCustomerDto) {
         return this.prisma.customer.update({
             where: { id },
             data: replaceCustomerDto
         });
     }
 
-    update(
-        id: number,
-        updateCustomerDto: UpdateCustomerDto,
-        
-    ) {
+    update(id: number, updateCustomerDto: UpdateCustomerDto) {
         return this.prisma.customer.update({
             where: { id },
             data: updateCustomerDto
