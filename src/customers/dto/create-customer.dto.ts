@@ -16,7 +16,7 @@ export class CreateCustomerDto {
     @IsDate()
     @Transform(({ value }) => new Date(value))
     @IsNotEmpty()
-    @ApiProperty()
+    @ApiProperty({ description: 'Time is ignored', example: '1999-94-23' })
     birthDate: Date;
 
     @IsString()

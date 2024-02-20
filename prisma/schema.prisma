@@ -37,7 +37,7 @@ model Customer {
 
   name      String
   surname   String
-  birthDate DateTime @map("birth_date")
+  birthDate DateTime @map("birth_date") @db.Date
 
   birthPlace       String? @map("birth_place")
   residenceStreet  String? @map("residence_street")
