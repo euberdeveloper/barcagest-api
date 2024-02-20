@@ -37,7 +37,7 @@ model Customer {
 
   name      String
   surname   String
-  birthdate DateTime
+  birthDate DateTime @map("birth_date")
 
   birthPlace       String? @map("birth_place")
   residenceStreet  String? @map("residence_street")
@@ -57,7 +57,7 @@ model Customer {
 
   Park Park[]
 
-  @@unique([name, surname, birthdate])
+  @@unique([name, surname, birthDate])
   @@map("customer")
 }
 
