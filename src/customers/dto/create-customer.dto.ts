@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateCustomerDto {
@@ -13,6 +14,7 @@ export class CreateCustomerDto {
     surname: string;
 
     @IsDate()
+    @Transform(({ value }) => new Date(value))
     @IsNotEmpty()
     @ApiProperty()
     birthDate: Date;
