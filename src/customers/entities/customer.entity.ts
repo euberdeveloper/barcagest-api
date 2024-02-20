@@ -50,7 +50,7 @@ export class CustomerEntity implements Customer {
     @ApiProperty()
     updatedAt: Date;
 
-    constructor(customer: Customer) {
+    constructor(customer: CustomerEntity) {
         Object.assign(this, customer);
     }
 }
