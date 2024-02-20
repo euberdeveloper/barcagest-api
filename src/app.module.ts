@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { PrismaModule } from 'nestjs-prisma';
 
-import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
@@ -12,7 +12,9 @@ import { AuthorizationGuard } from './auth/guards/authorization.guard';
 
 @Module({
     imports: [
-        PrismaModule,
+        PrismaModule.forRoot({
+            isGlobal: true
+        }),
         AuthModule,
         RolesModule,
         UsersModule,
