@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
+    IsBoolean,
     IsDate,
     IsDefined,
     IsNotEmpty,
@@ -75,6 +76,11 @@ export class CreateParkingDto {
     @IsOptional()
     @ApiProperty({ required: false })
     contractNumber?: string;
+
+    @IsBoolean()
+    @IsDefined()
+    @ApiProperty()
+    isAnnual: boolean;
 
     @IsNumber()
     @IsOptional()

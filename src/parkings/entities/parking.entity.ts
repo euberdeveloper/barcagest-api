@@ -43,6 +43,9 @@ export class ParkingEntity implements Parking {
     })
     price: Prisma.Decimal | null;
 
+    @ApiProperty()
+    isAnnual: boolean;
+
     @ApiProperty({ nullable: true, type: String })
     notes: string | null;
 
