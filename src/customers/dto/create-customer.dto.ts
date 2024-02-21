@@ -1,6 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IdentificationType } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+    IsDate,
+    IsDefined,
+    IsEnum,
+    IsNotEmpty,
+    IsOptional,
+    IsString
+} from 'class-validator';
 
 export class CreateCustomerDto {
     @IsString()
@@ -59,10 +67,15 @@ export class CreateCustomerDto {
     @ApiProperty({ required: false })
     ssn?: string;
 
+    @IsEnum(IdentificationType)
+    @IsDefined()
+    @ApiProperty()
+    identificationType: IdentificationType;
+
     @IsString()
-    @IsOptional()
-    @ApiProperty({ required: false })
-    idCardCode?: string;
+    @IsNotEmpty()
+    @ApiProperty()
+    identificationCode: string;
 
     @IsString()
     @IsOptional()

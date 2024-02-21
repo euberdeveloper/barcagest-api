@@ -4,7 +4,6 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { ReplaceCustomerDto } from './dto/replace-customer.dto';
-import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class CustomersService {
@@ -14,9 +13,15 @@ export class CustomersService {
         return this.prisma.customer.findMany();
     }
 
-    findOne(id: number) {
+    findById(id: number) {
         return this.prisma.customer.findUniqueOrThrow({
             where: { id }
+        });
+    }
+
+    findByIdCode(identificationCode: string) {
+        return this.prisma.customer.findUniqueOrThrow({
+            where: { identificationCode }
         });
     }
 
@@ -26,21 +31,45 @@ export class CustomersService {
         });
     }
 
-    replace(id: number, replaceCustomerDto: ReplaceCustomerDto) {
+    replaceById(id: number, replaceCustomerDto: ReplaceCustomerDto) {
         return this.prisma.customer.update({
             where: { id },
             data: replaceCustomerDto
         });
     }
 
-    update(id: number, updateCustomerDto: UpdateCustomerDto) {
+    replaceByIdCode(
+        identificationCode: string,
+        replaceCustomerDto: ReplaceCustomerDto
+    ) {
+        return this.prisma.customer.update({
+            where: { identificationCode },
+            data: replaceCustomerDto
+        });
+    }
+
+    updateById(id: number, updateCustomerDto: UpdateCustomerDto) {
         return this.prisma.customer.update({
             where: { id },
             data: updateCustomerDto
         });
     }
 
-    remove(id: number) {
+    updateByIdCode(
+        identificationCode: string,
+        updateCustomerDto: UpdateCustomerDto
+    ) {
+        return this.prisma.customer.update({
+            where: { identificationCode },
+            data: updateCustomerDto
+        });
+    }
+
+    removeById(id: number) {
         return this.prisma.customer.delete({ where: { id } });
+    }
+
+    removeByIdCode(identificationCode: string) {
+        return this.prisma.customer.delete({ where: { identificationCode } });
     }
 }

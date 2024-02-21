@@ -8,8 +8,7 @@ import {
     Delete,
     HttpCode,
     HttpStatus,
-    Put,
-    Query
+    Put
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
@@ -48,8 +47,22 @@ export class CustomersController {
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Gets the customer with the specified id' })
     @ApiOkResponse({ type: CustomerEntity })
-    async findOne(@Param('id') id: number): Promise<CustomerEntity> {
-        return new CustomerEntity(await this.customersService.findOne(id));
+    async findById(@Param('id') id: number): Promise<CustomerEntity> {
+        return new CustomerEntity(await this.customersService.findById(id));
+    }
+
+    @Get('identification-code/:identificationCode')
+    @ApiBearerAuth()
+    @ApiOperation({
+        summary: 'Gets the customer with the specified identification code'
+    })
+    @ApiOkResponse({ type: CustomerEntity })
+    async findByIdentificationCode(
+        @Param('identificationCode') identificationCode: string
+    ): Promise<CustomerEntity> {
+        return new CustomerEntity(
+            await this.customersService.findByIdCode(identificationCode)
+        );
     }
 
     @Post()
@@ -74,7 +87,24 @@ export class CustomersController {
         @Body() replaceCustomerDto: ReplaceCustomerDto
     ): Promise<CustomerEntity> {
         return new CustomerEntity(
-            await this.customersService.replace(id, replaceCustomerDto)
+            await this.customersService.replaceById(id, replaceCustomerDto)
+        );
+    }
+
+    @Put('identification-code/:identificationCode')
+    @Roles(RoleName.ROOT, RoleName.ADMIN)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Replaces a customer' })
+    @ApiOkResponse({ type: CustomerEntity })
+    async replaceByIdentificationCode(
+        @Param('identificationCode') identificationCode: string,
+        @Body() replaceCustomerDto: ReplaceCustomerDto
+    ): Promise<CustomerEntity> {
+        return new CustomerEntity(
+            await this.customersService.replaceByIdCode(
+                identificationCode,
+                replaceCustomerDto
+            )
         );
     }
 
@@ -88,7 +118,24 @@ export class CustomersController {
         @Body() updateCustomerDto: UpdateCustomerDto
     ): Promise<CustomerEntity> {
         return new CustomerEntity(
-            await this.customersService.update(id, updateCustomerDto)
+            await this.customersService.updateById(id, updateCustomerDto)
+        );
+    }
+
+    @Patch('identification-code/:identificationCode')
+    @Roles(RoleName.ROOT, RoleName.ADMIN)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Updates a customer' })
+    @ApiOkResponse({ type: CustomerEntity })
+    async updateByIdentificationCode(
+        @Param('identificationCode') identificationCode: string,
+        @Body() updateCustomerDto: UpdateCustomerDto
+    ): Promise<CustomerEntity> {
+        return new CustomerEntity(
+            await this.customersService.updateByIdCode(
+                identificationCode,
+                updateCustomerDto
+            )
         );
     }
 
@@ -99,6 +146,18 @@ export class CustomersController {
     @ApiNoContentResponse()
     @HttpCode(HttpStatus.NO_CONTENT)
     async remove(@Param('id') id: number): Promise<void> {
-        await this.customersService.remove(id);
+        await this.customersService.removeById(id);
+    }
+
+    @Delete('identification-code/:identificationCode')
+    @Roles(RoleName.ROOT, RoleName.ADMIN)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Removes a customer' })
+    @ApiNoContentResponse()
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async removeByIdentificationCode(
+        @Param('identificationCode') identificationCode: string
+    ): Promise<void> {
+        await this.customersService.removeByIdCode(identificationCode);
     }
 }

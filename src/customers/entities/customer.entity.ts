@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Customer } from '@prisma/client';
+import { Customer, IdentificationType } from '@prisma/client';
 
 export class CustomerEntity implements Customer {
     @ApiProperty()
@@ -38,8 +38,11 @@ export class CustomerEntity implements Customer {
     @ApiProperty({ nullable: true, type: String })
     ssn: string | null;
 
-    @ApiProperty({ nullable: true, type: String })
-    idCardCode: string | null;
+    @ApiProperty({ enum: IdentificationType, enumName: 'IdentificationType' })
+    identificationType: IdentificationType;
+
+    @ApiProperty()
+    identificationCode: string;
 
     @ApiProperty({ nullable: true, type: String })
     notes: string | null;
