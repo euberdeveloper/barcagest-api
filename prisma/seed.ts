@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
+async function addRoles() {
     type UpsertRoleArgs = Parameters<typeof prisma.role.upsert>[0];
     const rolesBodies: UpsertRoleArgs[] = [
         {
@@ -21,9 +21,18 @@ async function main() {
             create: { name: 'user' }
         }
     ];
-    const [rootRole, adminRole, userRole] = await Promise.all(
+    const roles = await Promise.all(
         rolesBodies.map((role) => prisma.role.upsert(role))
     );
+
+    console.log('Seeded roles:');
+    console.log(roles);
+
+    return roles;
+}
+
+async function addUsers() {
+    const [rootRole, adminRole] = await addRoles();
 
     type UpsertUserArgs = Parameters<typeof prisma.user.upsert>[0];
     const usersBodies: UpsertUserArgs[] = [
@@ -54,6 +63,127 @@ async function main() {
 
     console.log('Seeded users:');
     console.log(users);
+
+    return users;
+}
+
+async function addCustomers() {
+    type UpsertCustomerArgs = Parameters<typeof prisma.customer.upsert>[0];
+    const customersBodies: UpsertCustomerArgs[] = [
+        {
+            where: { identificationCode: 'ABC123ABC' },
+            update: {},
+            create: {
+                name: 'Eubero',
+                surname: 'Euberis',
+                birthDate: new Date('1990-01-01'),
+                birthPlace: 'Rome',
+                ssn: 'ABC',
+                identificationType: 'ID_CARD',
+                identificationCode: 'ABC123ABC',
+                email: 'euberdeveloper+barcagest_customer1@gmail.com',
+                phoneNumber: '+393331234567',
+                residenceCity: 'Muenchen',
+                residenceStreet: 'Musterstrasse',
+                residenceZip: '12345',
+                residenceCountry: 'Germany',
+                notes: 'This is a note'
+            }
+        },
+        {
+            where: { identificationCode: 'ABC123EFG' },
+            update: {},
+            create: {
+                name: 'Eubero',
+                surname: 'Euberis',
+                birthDate: new Date('1995-01-01'),
+                identificationType: 'PASSPORT',
+                identificationCode: 'ABC123EFG',
+                email: 'euberdeveloper+barcagest_customer2@gmail.com'
+            }
+        }
+    ];
+
+    const customers = await Promise.all(
+        customersBodies.map((customer) => prisma.customer.upsert(customer))
+    );
+
+    console.log('Seeded customers:');
+    console.log(customers);
+
+    return customers;
+}
+
+async function addParkings() {
+    const customers = await addCustomers();
+
+    type UpsertParkingArgs = Parameters<typeof prisma.parking.upsert>[0];
+    const parkingsBodies: UpsertParkingArgs[] = [
+        {
+            where: { id: 1 },
+            update: {},
+            create: {
+                vehicleType: 'barca',
+                vehicleBrand: 'Fiat',
+                vehiclePlate: 'ABC123',
+                registrationYear: 2020,
+                sizeInMeters: 4.5,
+                startDate: new Date('2021-01-01'),
+                endDate: new Date('2022-01-01'),
+                contractNumber: 'ABC123',
+                isAnnual: true,
+                price: 1000,
+                customerId: customers[0].id
+            }
+        },
+        {
+            where: { id: 2 },
+            update: {},
+            create: {
+                vehicleType: 'motoscafo',
+                vehicleBrand: 'Fiat',
+                vehiclePlate: 'ABC123',
+                registrationYear: 2020,
+                sizeInMeters: 4.5,
+                startDate: new Date('2021-01-01'),
+                isAnnual: true,
+                customerId: customers[0].id
+            }
+        },
+        {
+            where: { id: 3 },
+            update: {},
+            create: {
+                vehicleType: 'motoscafo',
+                vehicleBrand: 'Fiat',
+                vehiclePlate: 'ABC456',
+                registrationYear: 2020,
+                sizeInMeters: 4.5,
+                startDate: new Date('2021-01-01'),
+                endDate: new Date('2022-01-01'),
+                checkIn: new Date('2021-01-01'),
+                checkOut: new Date('2021-01-01'),
+                contractNumber: 'ABC456',
+                isAnnual: true,
+                price: 1000,
+                customerId: customers[1].id
+            }
+        }
+    ];
+
+    const parkings = await Promise.all(
+        parkingsBodies.map((parking) => prisma.parking.upsert(parking))
+    );
+
+    console.log('Seeded parkings:');
+    console.log(parkings);
+
+    return parkings;
+}
+
+async function main() {
+    await addUsers();
+    await addParkings();
 }
 
 main()
