@@ -117,62 +117,60 @@ async function addCustomers() {
 async function addParkings() {
     const customers = await addCustomers();
 
-    type UpsertParkingArgs = Parameters<typeof prisma.parking.upsert>[0];
-    const parkingsBodies: UpsertParkingArgs[] = [
+    type CreateParkingArgs = Parameters<typeof prisma.parking.create>[0];
+    type ParkingArgsPayload = CreateParkingArgs['data'];
+    const parkingPayloads: ParkingArgsPayload[] = [
         {
-            where: { id: 1 },
-            update: {},
-            create: {
-                vehicleType: 'barca',
-                vehicleBrand: 'Fiat',
-                vehiclePlate: 'ABC123',
-                registrationYear: 2020,
-                sizeInMeters: 4.5,
-                startDate: new Date('2021-01-01'),
-                endDate: new Date('2022-01-01'),
-                contractNumber: 'ABC123',
-                isAnnual: true,
-                price: 1000,
-                customerId: customers[0].id
-            }
+            vehicleType: 'barca',
+            vehicleBrand: 'Fiat',
+            vehiclePlate: 'ABC123',
+            registrationYear: 2020,
+            sizeInMeters: 4.5,
+            startDate: new Date('2021-01-01'),
+            endDate: new Date('2022-01-01'),
+            contractNumber: 'ABC123',
+            isAnnual: true,
+            price: 1000.25,
+            customerId: customers[0].id
         },
         {
-            where: { id: 2 },
-            update: {},
-            create: {
-                vehicleType: 'motoscafo',
-                vehicleBrand: 'Fiat',
-                vehiclePlate: 'ABC123',
-                registrationYear: 2020,
-                sizeInMeters: 4.5,
-                startDate: new Date('2021-01-01'),
-                isAnnual: false,
-                customerId: customers[0].id
-            }
+            vehicleType: 'motoscafo',
+            vehicleBrand: 'Fiat',
+            vehiclePlate: 'ABC123',
+            registrationYear: 2020,
+            sizeInMeters: 4.5,
+            startDate: new Date('2021-01-01'),
+            isAnnual: false,
+            customerId: customers[0].id
         },
         {
-            where: { id: 3 },
-            update: {},
-            create: {
-                vehicleType: 'motoscafo',
-                vehicleBrand: 'Fiat',
-                vehiclePlate: 'ABC456',
-                registrationYear: 2020,
-                sizeInMeters: 4.5,
-                startDate: new Date('2021-01-01'),
-                endDate: new Date('2022-01-01'),
-                checkIn: new Date('2021-01-01'),
-                checkOut: new Date('2021-01-01'),
-                contractNumber: 'ABC456',
-                isAnnual: true,
-                price: 1000,
-                customerId: customers[1].id
-            }
+            vehicleType: 'motoscafo',
+            vehicleBrand: 'Fiat',
+            vehiclePlate: 'ABC456',
+            registrationYear: 2020,
+            sizeInMeters: 4.5,
+            startDate: new Date('2021-01-01'),
+            endDate: new Date('2022-01-01'),
+            checkIn: new Date('2021-01-01'),
+            checkOut: new Date('2021-01-01'),
+            contractNumber: 'ABC456',
+            isAnnual: true,
+            price: 1000,
+            customerId: customers[1].id
         }
     ];
 
+    await Promise.all(
+        parkingPayloads.map((parking) =>
+            prisma.parking.deleteMany({
+                where: { ...parking, customer: undefined, id: undefined }
+            })
+        )
+    );
     const parkings = await Promise.all(
-        parkingsBodies.map((parking) => prisma.parking.upsert(parking))
+        parkingPayloads.map((parking) =>
+            prisma.parking.create({ data: parking })
+        )
     );
 
     console.log('Seeded parkings:');
