@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Parking, Prisma } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import { CustomerEntity } from 'src/customers/entities/customer.entity';
 
 export class ParkingEntity implements Parking {
@@ -41,6 +42,9 @@ export class ParkingEntity implements Parking {
         type: Number,
         description: 'Price is in euros'
     })
+    @Transform(({ value }: { value: Prisma.Decimal | null }) =>
+        value ? value.toNumber() : null
+    )
     price: Prisma.Decimal | null;
 
     @ApiProperty()
