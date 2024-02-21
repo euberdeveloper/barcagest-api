@@ -9,6 +9,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum IdentificationType {
+  ID_CARD
+  PASSPORT
+  DRIVING_LICENSE
+}
+
 model Parking {
   id Int @id @default(autoincrement())
 
@@ -26,7 +32,8 @@ model Parking {
   contractNumber String?  @map("contract_number")
   price          Decimal? @db.Decimal(9, 2)
 
-  notes String?
+  isAnnual Boolean @map("is_annual")
+  notes    String?
 
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @map("customer_id")
@@ -50,7 +57,9 @@ model Customer {
   phoneNumber String? @map("phone_number")
   email       String?
   ssn         String?
-  idCardCode  String? @map("id_card_code")
+
+  identificationType IdentificationType @map("identification_type")
+  identificationCode String             @unique @map("identification_code")
 
   notes String?
 
@@ -59,7 +68,6 @@ model Customer {
 
   Park Parking[]
 
-  @@unique([name, surname, birthDate])
   @@map("customer")
 }
 
