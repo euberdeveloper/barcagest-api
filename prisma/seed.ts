@@ -146,7 +146,7 @@ async function addParkings() {
                 registrationYear: 2020,
                 sizeInMeters: 4.5,
                 startDate: new Date('2021-01-01'),
-                isAnnual: true,
+                isAnnual: false,
                 customerId: customers[0].id
             }
         },
