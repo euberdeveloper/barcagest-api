@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Customer, IdentificationType } from '@prisma/client';
+import { Customer, IdentityType } from '@prisma/client';
 
 export class CustomerEntity implements Customer {
     @ApiProperty()
@@ -14,20 +14,20 @@ export class CustomerEntity implements Customer {
     @ApiProperty()
     birthDate: Date;
 
-    @ApiProperty({ nullable: true, type: String })
-    birthPlace: string | null;
+    @ApiProperty()
+    birthPlace: string;
 
-    @ApiProperty({ nullable: true, type: String })
-    residenceStreet: string | null;
+    @ApiProperty()
+    residenceStreet: string;
 
-    @ApiProperty({ nullable: true, type: String })
-    residenceZip: string | null;
+    @ApiProperty()
+    residenceZip: string;
 
-    @ApiProperty({ nullable: true, type: String })
-    residenceCity: string | null;
+    @ApiProperty()
+    residenceCity: string;
 
-    @ApiProperty({ nullable: true, type: String })
-    residenceCountry: string | null;
+    @ApiProperty()
+    residenceCountry: string;
 
     @ApiProperty({ nullable: true, type: String })
     phoneNumber: string | null;
@@ -38,11 +38,17 @@ export class CustomerEntity implements Customer {
     @ApiProperty({ nullable: true, type: String })
     ssn: string | null;
 
-    @ApiProperty({ enum: IdentificationType, enumName: 'IdentificationType' })
-    identificationType: IdentificationType;
+    @ApiProperty({ enum: IdentityType, enumName: 'IdentityType' })
+    identityType: IdentityType;
 
     @ApiProperty()
-    identificationCode: string;
+    identityCity: string;
+
+    @ApiProperty()
+    identityIssuedAt: Date;
+
+    @ApiProperty()
+    identityCode: string;
 
     @ApiProperty({ nullable: true, type: String })
     notes: string | null;
