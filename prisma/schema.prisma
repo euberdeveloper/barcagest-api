@@ -25,8 +25,8 @@ model Parking {
   registrationYear Int    @map("registration_year")
   sizeInMeters     Float  @map("size_in_meters")
 
-  startDate DateTime  @map("start_date")
-  endDate   DateTime?  @map("end_date")
+  startDate DateTime? @map("start_date")
+  endDate   DateTime? @map("end_date")
   checkIn   DateTime? @map("check_in")
   checkOut  DateTime? @map("check_out")
 

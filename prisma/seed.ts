@@ -71,7 +71,7 @@ async function addCustomers() {
     type UpsertCustomerArgs = Parameters<typeof prisma.customer.upsert>[0];
     const customersBodies: UpsertCustomerArgs[] = [
         {
-            where: { identificationCode: 'ABC123ABC' },
+            where: { identityCode: 'ABC123ABC' },
             update: {},
             create: {
                 name: 'Eubero',
@@ -79,8 +79,8 @@ async function addCustomers() {
                 birthDate: new Date('1990-01-01'),
                 birthPlace: 'Rome',
                 ssn: 'ABC',
-                identificationType: 'ID_CARD',
-                identificationCode: 'ABC123ABC',
+                identityType: 'ID_CARD',
+                identityCode: 'ABC123ABC',
                 email: 'euberdeveloper+barcagest_customer1@gmail.com',
                 phoneNumber: '+393331234567',
                 residenceCity: 'Muenchen',
@@ -91,14 +91,14 @@ async function addCustomers() {
             }
         },
         {
-            where: { identificationCode: 'ABC123EFG' },
+            where: { identityCode: 'ABC123EFG' },
             update: {},
             create: {
                 name: 'Eubero',
                 surname: 'Euberis',
                 birthDate: new Date('1995-01-01'),
-                identificationType: 'PASSPORT',
-                identificationCode: 'ABC123EFG',
+                identityType: 'PASSPORT',
+                identityCode: 'ABC123EFG',
                 email: 'euberdeveloper+barcagest_customer2@gmail.com'
             }
         }
