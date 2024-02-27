@@ -22,8 +22,8 @@ export class ParkingEntity implements Parking {
     @ApiProperty()
     sizeInMeters: number;
 
-    @ApiProperty({ description: 'Time is ignored' })
-    startDate: Date;
+    @ApiProperty({ nullable: true, type: Date, description: 'Time is ignored' })
+    startDate: Date | null;
 
     @ApiProperty({ nullable: true, type: Date, description: 'Time is ignored' })
     endDate: Date | null;

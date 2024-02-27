@@ -38,9 +38,13 @@ export class CreateParkingDto {
 
     @Transform(({ value }) => new Date(value))
     @IsDate()
-    @IsDefined()
-    @ApiProperty({ description: 'Time is ignored' })
-    startDate: Date;
+    @IsOptional()
+    @ApiProperty({
+        required: false,
+        type: Date,
+        description: 'Time is ignored'
+    })
+    startDate?: Date;
 
     @Transform(({ value }) => new Date(value))
     @IsDate()
