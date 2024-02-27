@@ -9,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum IdentificationType {
+enum IdentityType {
   ID_CARD
   PASSPORT
   DRIVING_LICENSE
@@ -26,7 +26,7 @@ model Parking {
   sizeInMeters     Float  @map("size_in_meters")
 
   startDate DateTime  @map("start_date")
-  endDate   DateTime? @map("end_date")
+  endDate   DateTime  @map("end_date")
   checkIn   DateTime? @map("check_in")
   checkOut  DateTime? @map("check_out")
 
@@ -35,6 +35,9 @@ model Parking {
 
   isAnnual Boolean @map("is_annual")
   notes    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @map("customer_id")
@@ -49,18 +52,20 @@ model Customer {
   surname   String
   birthDate DateTime @map("birth_date") @db.Date
 
-  birthPlace       String? @map("birth_place")
-  residenceStreet  String? @map("residence_street")
-  residenceCity    String? @map("residence_city")
-  residenceZip     String? @map("residence_zip")
-  residenceCountry String? @map("residence_country")
+  birthPlace       String @map("birth_place")
+  residenceStreet  String @map("residence_street")
+  residenceCity    String @map("residence_city")
+  residenceZip     String @map("residence_zip")
+  residenceCountry String @map("residence_country")
 
   phoneNumber String? @map("phone_number")
   email       String?
   ssn         String?
 
-  identificationType IdentificationType @map("identification_type")
-  identificationCode String             @unique @map("identification_code")
+  identityType     IdentityType @map("identification_type")
+  identityCity     String       @map("identity_city")
+  identityIssuedAt DateTime     @map("identity_issued_at") @db.Date
+  identityCode     String       @unique @map("identification_code")
 
   notes String?
 
