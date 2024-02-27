@@ -13,6 +13,7 @@ enum IdentificationType {
   ID_CARD
   PASSPORT
   DRIVING_LICENSE
+  BOAT_LICENSE
 }
 
 model Parking {
