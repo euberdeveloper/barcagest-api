@@ -99,4 +99,28 @@ export class ParkingsController {
     async remove(@Param('id') id: number): Promise<void> {
         await this.parkingsService.remove(id);
     }
+
+    @Get('annuals/renovals')
+    @Roles(RoleName.ROOT, RoleName.ADMIN)
+    @ApiBearerAuth()
+    @ApiOperation({
+        summary:
+            'Returns the parkings that would be renoved if the annual renove is executed.'
+    })
+    async getAnnualRenovals(): Promise<ParkingEntity[]> {
+        const parkings = await this.parkingsService.findAnnualRenovals();
+        return parkings.map((parking) => new ParkingEntity(parking));
+    }
+
+    @Post('annuals/renovals')
+    @Roles(RoleName.ROOT, RoleName.ADMIN)
+    @ApiBearerAuth()
+    @ApiOperation({
+        summary:
+            'Renoves the annual parkings, whose end date is not passed but is in this year.'
+    })
+    async doAnnualRenovals(): Promise<ParkingEntity[]> {
+        const parkings = await this.parkingsService.renoveAnnuals();
+        return parkings.map((parking) => new ParkingEntity(parking));
+    }
 }
