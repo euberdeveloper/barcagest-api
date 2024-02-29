@@ -51,9 +51,11 @@ export class ParkingsService {
     }
 
     private getWhereFromEndDate(endDate: string) {
-        const [year, month] = endDate.split('-').map(Number);
-        const minDate = new Date(Date.UTC(year, month - 1, 1));
-        const maxDate = new Date(Date.UTC(year, month, 1));
+        const parts = endDate.split('-').map(Number);
+        const year = parts[0];
+        const month = parts[1];
+        const minDate = new Date(Date.UTC(year, month ? month - 1 : 0, 1));
+        const maxDate = new Date(Date.UTC(year, month ? month : 12, 1));
         return { endDate: { gte: minDate, lt: maxDate } };
     }
 
