@@ -4,6 +4,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateParkingDto } from './dto/create-parking.dto';
 import { UpdateParkingDto } from './dto/update-parking.dto';
 import { ReplaceParkingDto } from './dto/replace-parking.dto';
+import { QueryParamParkingDto } from './dto/query-param-parking.dto';
 
 @Injectable()
 export class ParkingsService {
@@ -49,8 +50,16 @@ export class ParkingsService {
         };
     }
 
-    findAll() {
+    private getWhereFromEndDate(endDate: string) {
+        const [year, month] = endDate.split('-').map(Number);
+        const minDate = new Date(Date.UTC(year, month - 1, 1));
+        const maxDate = new Date(Date.UTC(year, month, 1));
+        return { endDate: { gte: minDate, lt: maxDate } };
+    }
+
+    findAll({ endDate }: QueryParamParkingDto) {
         return this.prisma.parking.findMany({
+            where: endDate ? this.getWhereFromEndDate(endDate) : undefined,
             include: { customer: true }
         });
     }
