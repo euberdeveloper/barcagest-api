@@ -4,13 +4,16 @@ import { PrismaService } from 'nestjs-prisma';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { ReplaceCustomerDto } from './dto/replace-customer.dto';
+import { QueryParamCustomersDto } from './dto/query-param-customer.dto';
 
 @Injectable()
 export class CustomersService {
     constructor(private prisma: PrismaService) {}
 
-    findAll() {
-        return this.prisma.customer.findMany();
+    findAll(query: QueryParamCustomersDto) {
+        return this.prisma.customer.findMany({
+            include: query.embed === 'parkings' ? { parkings: true } : undefined
+        });
     }
 
     findById(id: number) {

@@ -8,7 +8,8 @@ import {
     Delete,
     HttpCode,
     HttpStatus,
-    Put
+    Put,
+    Query
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
@@ -28,6 +29,8 @@ import { CustomersService } from './customers.service';
 import { RoleName } from 'src/roles/entities/role.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { QueryParamCustomersDto } from './dto/query-param-customer.dto';
+import { ParkingEntity } from 'src/parkings/entities/parking.entity';
 
 @Controller('customers')
 @ApiTags('customers')
@@ -38,8 +41,20 @@ export class CustomersController {
     @Public()
     @ApiOperation({ summary: 'Get all customers' })
     @ApiOkResponse({ type: [CustomerEntity] })
-    async findPublished(): Promise<CustomerEntity[]> {
-        const customers = await this.customersService.findAll();
+    async findPublished(
+        @Query() query: QueryParamCustomersDto
+    ): Promise<CustomerEntity[]> {
+        const customers = (await this.customersService.findAll(query)).map(
+            (customer: any) => {
+                if (customer.parkings) {
+                    customer.parkings = customer.parkings.map(
+                        (parking: any) => new ParkingEntity(parking)
+                    );
+                }
+                return customer;
+            }
+        );
+
         return customers.map((customer) => new CustomerEntity(customer));
     }
 

@@ -59,7 +59,7 @@ export class CustomerEntity implements Customer {
     @ApiProperty()
     updatedAt: Date;
 
-    constructor(customer: CustomerEntity) {
+    constructor(customer: Partial<CustomerEntity>) {
         Object.assign(this, customer);
     }
 }
