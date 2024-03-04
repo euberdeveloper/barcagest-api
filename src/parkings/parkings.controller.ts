@@ -51,7 +51,21 @@ export class ParkingsController {
     @ApiOperation({ summary: 'Gets the parking with the specified id' })
     @ApiOkResponse({ type: ParkingEntity })
     async findOne(@Param('id') id: number): Promise<ParkingEntity> {
-        return new ParkingEntity(await this.parkingsService.findOne(id));
+        return new ParkingEntity(await this.parkingsService.findById(id));
+    }
+
+    @Get('/contract-number/:contractNumber')
+    @ApiBearerAuth()
+    @ApiOperation({
+        summary: 'Gets the parking with the specified contract number'
+    })
+    @ApiOkResponse({ type: ParkingEntity })
+    async findByContractNumber(
+        @Param('contractNumber') contractNumber: string
+    ): Promise<ParkingEntity> {
+        return new ParkingEntity(
+            await this.parkingsService.findByContractNumber(contractNumber)
+        );
     }
 
     @Post()

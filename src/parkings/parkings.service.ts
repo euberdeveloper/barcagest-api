@@ -66,9 +66,16 @@ export class ParkingsService {
         });
     }
 
-    findOne(id: number) {
+    findById(id: number) {
         return this.prisma.parking.findUniqueOrThrow({
             where: { id },
+            include: { customer: true }
+        });
+    }
+
+    findByContractNumber(contractNumber: string) {
+        return this.prisma.parking.findUniqueOrThrow({
+            where: { contractNumber },
             include: { customer: true }
         });
     }
