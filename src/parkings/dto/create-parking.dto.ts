@@ -77,9 +77,9 @@ export class CreateParkingDto {
     checkOut?: Date;
 
     @IsString()
-    @IsOptional()
-    @ApiProperty({ required: false })
-    contractNumber?: string;
+    @IsNotEmpty()
+    @ApiProperty()
+    contractNumber: string;
 
     @IsBoolean()
     @IsDefined()
