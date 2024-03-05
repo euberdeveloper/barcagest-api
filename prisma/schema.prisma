@@ -27,8 +27,6 @@ model Parking {
 
   startDate DateTime? @map("start_date")
   endDate   DateTime? @map("end_date")
-  checkIn   DateTime? @map("check_in")
-  checkOut  DateTime? @map("check_out")
 
   contractNumber String   @unique @map("contract_number")
   price          Decimal? @db.Decimal(9, 2)

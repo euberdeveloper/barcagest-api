@@ -80,6 +80,8 @@ async function addCustomers() {
                 birthPlace: 'Rome',
                 ssn: 'ABC',
                 identityType: 'ID_CARD',
+                identityCity: 'Valdagno',
+                identityIssuedAt: new Date('2010-01-01'),
                 identityCode: 'ABC123ABC',
                 email: 'euberdeveloper+barcagest_customer1@gmail.com',
                 phoneNumber: '+393331234567',
@@ -97,9 +99,16 @@ async function addCustomers() {
                 name: 'Eubero',
                 surname: 'Euberis',
                 birthDate: new Date('1995-01-01'),
+                birthPlace: 'Rome',
                 identityType: 'PASSPORT',
+                identityCity: 'Valdagno',
+                identityIssuedAt: new Date('2010-01-01'),
                 identityCode: 'ABC123EFG',
-                email: 'euberdeveloper+barcagest_customer2@gmail.com'
+                email: 'euberdeveloper+barcagest_customer2@gmail.com',
+                residenceCity: 'Muenchen',
+                residenceStreet: 'Musterstrasse',
+                residenceZip: '12345',
+                residenceCountry: 'Germany'
             }
         }
     ];
@@ -140,6 +149,7 @@ async function addParkings() {
             registrationYear: 2020,
             sizeInMeters: 4.5,
             startDate: new Date('2021-01-01'),
+            contractNumber: '001',
             isAnnual: false,
             customerId: customers[0].id
         },
@@ -151,8 +161,6 @@ async function addParkings() {
             sizeInMeters: 4.5,
             startDate: new Date('2021-01-01'),
             endDate: new Date('2022-01-01'),
-            checkIn: new Date('2021-01-01'),
-            checkOut: new Date('2021-01-01'),
             contractNumber: 'ABC456',
             isAnnual: true,
             price: 1000,
