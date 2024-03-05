@@ -1,6 +1,18 @@
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+const roundsOfHash = process.env.SECURITY_HASH_ROUNDS
+    ? +process.env.SECURITY_HASH_ROUNDS
+    : 10;
 
 const prisma = new PrismaClient();
+
+async function hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, roundsOfHash);
+}
 
 async function addRoles() {
     type UpsertRoleArgs = Parameters<typeof prisma.role.upsert>[0];
@@ -42,7 +54,7 @@ async function addUsers() {
             create: {
                 email: 'euberdeveloper+barcagest@gmail.com',
                 fullname: 'Eugenio Berretta',
-                password: 'password',
+                password: await hashPassword('password'),
                 roleId: rootRole.id
             }
         },
@@ -52,7 +64,7 @@ async function addUsers() {
             create: {
                 email: 'euberdeveloper+barcagestadmin@gmail.com',
                 fullname: 'Eubero Euberis',
-                password: 'password',
+                password: await hashPassword('password'),
                 roleId: adminRole.id
             }
         }

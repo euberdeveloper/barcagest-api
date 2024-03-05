@@ -11,6 +11,11 @@ const config = {
             secret: process.env.SECURITY_JWT_SECRET,
             expiresIn: process.env.SECURITY_JWT_EXPIRES_IN,
             issuer: process.env.SECURITY_JWT_ISSUER
+        },
+        hash: {
+            rounds: process.env.SECURITY_HASH_ROUNDS
+                ? +process.env.SECURITY_HASH_ROUNDS
+                : 10
         }
     }
 };

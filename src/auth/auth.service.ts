@@ -1,7 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'nestjs-prisma';
+import * as bcrypt from 'bcrypt';
+
 import { UserEntity } from 'src/users/entities/user.entity';
+
 import { JwtBody, JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
@@ -16,11 +19,16 @@ export class AuthService {
         password: string
     ): Promise<UserEntity> {
         const user = await this.prisma.user.findUnique({
-            where: { email, password },
+            where: { email },
             include: { role: true }
         });
 
         if (!user) {
+            throw new UnauthorizedException('Invalid email or password');
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
             throw new UnauthorizedException('Invalid email or password');
         }
 
