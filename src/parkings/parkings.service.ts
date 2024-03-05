@@ -5,6 +5,7 @@ import { CreateParkingDto } from './dto/create-parking.dto';
 import { UpdateParkingDto } from './dto/update-parking.dto';
 import { ReplaceParkingDto } from './dto/replace-parking.dto';
 import { QueryParamParkingDto } from './dto/query-param-parking.dto';
+import { ParkingEntity } from './entities/parking.entity';
 
 @Injectable()
 export class ParkingsService {
@@ -36,6 +37,15 @@ export class ParkingsService {
             date.getMonth(),
             date.getDate()
         );
+    }
+
+    private getNewContractNumber(
+        parking: Pick<ParkingEntity, 'contractNumber' | 'endDate'>
+    ): string {
+        const contractNumberWithoutYear = parking.contractNumber.split('/')[0];
+        const year = parking.endDate?.getFullYear() ?? new Date().getFullYear();
+        const twoDigitsYear = (year + 1).toString().slice(-2);
+        return `${contractNumberWithoutYear}/${twoDigitsYear}`;
     }
 
     private getAnnualRenovalsWhere() {
@@ -122,6 +132,7 @@ export class ParkingsService {
             ...parking,
             startDate: this.getDayAfter(parking.endDate!),
             endDate: this.getYearAfer(parking.endDate!),
+            contractNumber: this.getNewContractNumber(parking),
             id: undefined,
             createdAt: undefined,
             updatedAt: undefined
@@ -137,7 +148,7 @@ export class ParkingsService {
         });
         const maxId = maxResult!.id;
 
-        const [updateResult, createResult] = await this.prisma.$transaction([
+        await this.prisma.$transaction([
             this.prisma.parking.updateMany({
                 where: this.getAnnualRenovalsWhere(),
                 data: { isAnnual: false }
@@ -146,8 +157,6 @@ export class ParkingsService {
                 data: parkingsRenoved
             })
         ]);
-
-        console.log({ updateResult, createResult });
 
         return this.prisma.parking.findMany({
             where: { id: { gt: maxId } },
