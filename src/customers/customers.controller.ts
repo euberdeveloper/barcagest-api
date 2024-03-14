@@ -8,7 +8,8 @@ import {
     Delete,
     HttpCode,
     HttpStatus,
-    Put
+    Put,
+    Query
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
@@ -28,6 +29,8 @@ import { CustomersService } from './customers.service';
 import { RoleName } from 'src/roles/entities/role.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { QueryParamCustomersDto } from './dto/query-param-customer.dto';
+import { ParkingEntity } from 'src/parkings/entities/parking.entity';
 
 @Controller('customers')
 @ApiTags('customers')
@@ -38,8 +41,20 @@ export class CustomersController {
     @Public()
     @ApiOperation({ summary: 'Get all customers' })
     @ApiOkResponse({ type: [CustomerEntity] })
-    async findPublished(): Promise<CustomerEntity[]> {
-        const customers = await this.customersService.findAll();
+    async findPublished(
+        @Query() query: QueryParamCustomersDto
+    ): Promise<CustomerEntity[]> {
+        const customers = (await this.customersService.findAll(query)).map(
+            (customer: any) => {
+                if (customer.parkings) {
+                    customer.parkings = customer.parkings.map(
+                        (parking: any) => new ParkingEntity(parking)
+                    );
+                }
+                return customer;
+            }
+        );
+
         return customers.map((customer) => new CustomerEntity(customer));
     }
 
@@ -51,17 +66,17 @@ export class CustomersController {
         return new CustomerEntity(await this.customersService.findById(id));
     }
 
-    @Get('identification-code/:identificationCode')
+    @Get('identity-code/:identityCode')
     @ApiBearerAuth()
     @ApiOperation({
-        summary: 'Gets the customer with the specified identification code'
+        summary: 'Gets the customer with the specified identity code'
     })
     @ApiOkResponse({ type: CustomerEntity })
     async findByIdentificationCode(
-        @Param('identificationCode') identificationCode: string
+        @Param('identityCode') identityCode: string
     ): Promise<CustomerEntity> {
         return new CustomerEntity(
-            await this.customersService.findByIdCode(identificationCode)
+            await this.customersService.findByIdentityCode(identityCode)
         );
     }
 
@@ -91,18 +106,20 @@ export class CustomersController {
         );
     }
 
-    @Put('identification-code/:identificationCode')
+    @Put('identity-code/:identityCode')
     @Roles(RoleName.ROOT, RoleName.ADMIN)
     @ApiBearerAuth()
-    @ApiOperation({ summary: 'Replaces a customer' })
+    @ApiOperation({
+        summary: 'Replaces a customer by the specified identity code'
+    })
     @ApiOkResponse({ type: CustomerEntity })
     async replaceByIdentificationCode(
-        @Param('identificationCode') identificationCode: string,
+        @Param('identityCode') identityCode: string,
         @Body() replaceCustomerDto: ReplaceCustomerDto
     ): Promise<CustomerEntity> {
         return new CustomerEntity(
-            await this.customersService.replaceByIdCode(
-                identificationCode,
+            await this.customersService.replaceByIdentityCode(
+                identityCode,
                 replaceCustomerDto
             )
         );
@@ -122,18 +139,20 @@ export class CustomersController {
         );
     }
 
-    @Patch('identification-code/:identificationCode')
+    @Patch('identity-code/:identityCode')
     @Roles(RoleName.ROOT, RoleName.ADMIN)
     @ApiBearerAuth()
-    @ApiOperation({ summary: 'Updates a customer' })
+    @ApiOperation({
+        summary: 'Updates a customer by the specified identity code'
+    })
     @ApiOkResponse({ type: CustomerEntity })
     async updateByIdentificationCode(
-        @Param('identificationCode') identificationCode: string,
+        @Param('identityCode') identityCode: string,
         @Body() updateCustomerDto: UpdateCustomerDto
     ): Promise<CustomerEntity> {
         return new CustomerEntity(
-            await this.customersService.updateByIdCode(
-                identificationCode,
+            await this.customersService.updateByIdentityCode(
+                identityCode,
                 updateCustomerDto
             )
         );
@@ -149,15 +168,17 @@ export class CustomersController {
         await this.customersService.removeById(id);
     }
 
-    @Delete('identification-code/:identificationCode')
+    @Delete('identity-code/:identityCode')
     @Roles(RoleName.ROOT, RoleName.ADMIN)
     @ApiBearerAuth()
-    @ApiOperation({ summary: 'Removes a customer' })
+    @ApiOperation({
+        summary: 'Removes a customer by the specified identity code'
+    })
     @ApiNoContentResponse()
     @HttpCode(HttpStatus.NO_CONTENT)
     async removeByIdentificationCode(
-        @Param('identificationCode') identificationCode: string
+        @Param('identityCode') identityCode: string
     ): Promise<void> {
-        await this.customersService.removeByIdCode(identificationCode);
+        await this.customersService.removeByIdentityCode(identityCode);
     }
 }

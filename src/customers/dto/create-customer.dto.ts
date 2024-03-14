@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IdentificationType } from '@prisma/client';
+import { IdentityType } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import {
     IsDate,
@@ -29,28 +29,28 @@ export class CreateCustomerDto {
 
     @IsString()
     @IsOptional()
-    @ApiProperty({ required: false })
-    birthPlace?: string;
+    @ApiProperty()
+    birthPlace: string;
 
     @IsString()
     @IsOptional()
-    @ApiProperty({ required: false })
-    residenceStreet?: string;
+    @ApiProperty()
+    residenceStreet: string;
 
     @IsString()
     @IsOptional()
-    @ApiProperty({ required: false })
-    residenceZip?: string;
+    @ApiProperty()
+    residenceZip: string;
 
     @IsString()
     @IsOptional()
-    @ApiProperty({ required: false })
-    residenceCity?: string;
+    @ApiProperty()
+    residenceCity: string;
 
     @IsString()
     @IsOptional()
-    @ApiProperty({ required: false })
-    residenceCountry?: string;
+    @ApiProperty()
+    residenceCountry: string;
 
     @IsString()
     @IsOptional()
@@ -67,15 +67,26 @@ export class CreateCustomerDto {
     @ApiProperty({ required: false })
     ssn?: string;
 
-    @IsEnum(IdentificationType)
+    @IsEnum(IdentityType)
     @IsDefined()
     @ApiProperty()
-    identificationType: IdentificationType;
+    identityType: IdentityType;
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    identificationCode: string;
+    identityCity: string;
+
+    @IsDate()
+    @Transform(({ value }) => new Date(value))
+    @IsNotEmpty()
+    @ApiProperty({ description: 'Time is ignored', example: '1999-04-23' })
+    identityIssuedAt: Date;
+
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty()
+    identityCode: string;
 
     @IsString()
     @IsOptional()

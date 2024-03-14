@@ -1,6 +1,18 @@
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+const roundsOfHash = process.env.SECURITY_HASH_ROUNDS
+    ? +process.env.SECURITY_HASH_ROUNDS
+    : 10;
 
 const prisma = new PrismaClient();
+
+async function hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, roundsOfHash);
+}
 
 async function addRoles() {
     type UpsertRoleArgs = Parameters<typeof prisma.role.upsert>[0];
@@ -42,7 +54,7 @@ async function addUsers() {
             create: {
                 email: 'euberdeveloper+barcagest@gmail.com',
                 fullname: 'Eugenio Berretta',
-                password: 'password',
+                password: await hashPassword('password'),
                 roleId: rootRole.id
             }
         },
@@ -52,7 +64,7 @@ async function addUsers() {
             create: {
                 email: 'euberdeveloper+barcagestadmin@gmail.com',
                 fullname: 'Eubero Euberis',
-                password: 'password',
+                password: await hashPassword('password'),
                 roleId: adminRole.id
             }
         }
@@ -71,7 +83,7 @@ async function addCustomers() {
     type UpsertCustomerArgs = Parameters<typeof prisma.customer.upsert>[0];
     const customersBodies: UpsertCustomerArgs[] = [
         {
-            where: { identificationCode: 'ABC123ABC' },
+            where: { identityCode: 'ABC123ABC' },
             update: {},
             create: {
                 name: 'Eubero',
@@ -79,8 +91,10 @@ async function addCustomers() {
                 birthDate: new Date('1990-01-01'),
                 birthPlace: 'Rome',
                 ssn: 'ABC',
-                identificationType: 'ID_CARD',
-                identificationCode: 'ABC123ABC',
+                identityType: 'ID_CARD',
+                identityCity: 'Valdagno',
+                identityIssuedAt: new Date('2010-01-01'),
+                identityCode: 'ABC123ABC',
                 email: 'euberdeveloper+barcagest_customer1@gmail.com',
                 phoneNumber: '+393331234567',
                 residenceCity: 'Muenchen',
@@ -91,15 +105,22 @@ async function addCustomers() {
             }
         },
         {
-            where: { identificationCode: 'ABC123EFG' },
+            where: { identityCode: 'ABC123EFG' },
             update: {},
             create: {
                 name: 'Eubero',
                 surname: 'Euberis',
                 birthDate: new Date('1995-01-01'),
-                identificationType: 'PASSPORT',
-                identificationCode: 'ABC123EFG',
-                email: 'euberdeveloper+barcagest_customer2@gmail.com'
+                birthPlace: 'Rome',
+                identityType: 'PASSPORT',
+                identityCity: 'Valdagno',
+                identityIssuedAt: new Date('2010-01-01'),
+                identityCode: 'ABC123EFG',
+                email: 'euberdeveloper+barcagest_customer2@gmail.com',
+                residenceCity: 'Muenchen',
+                residenceStreet: 'Musterstrasse',
+                residenceZip: '12345',
+                residenceCountry: 'Germany'
             }
         }
     ];
@@ -140,6 +161,7 @@ async function addParkings() {
             registrationYear: 2020,
             sizeInMeters: 4.5,
             startDate: new Date('2021-01-01'),
+            contractNumber: '001',
             isAnnual: false,
             customerId: customers[0].id
         },
@@ -151,8 +173,6 @@ async function addParkings() {
             sizeInMeters: 4.5,
             startDate: new Date('2021-01-01'),
             endDate: new Date('2022-01-01'),
-            checkIn: new Date('2021-01-01'),
-            checkOut: new Date('2021-01-01'),
             contractNumber: 'ABC456',
             isAnnual: true,
             price: 1000,

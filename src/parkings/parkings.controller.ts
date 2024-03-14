@@ -8,7 +8,8 @@ import {
     Delete,
     HttpCode,
     HttpStatus,
-    Put
+    Put,
+    Query
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
@@ -27,6 +28,7 @@ import { ParkingEntity } from './entities/parking.entity';
 import { ParkingsService } from './parkings.service';
 import { RoleName } from 'src/roles/entities/role.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { QueryParamParkingDto } from './dto/query-param-parking.dto';
 
 @Controller('parkings')
 @ApiTags('parkings')
@@ -37,8 +39,10 @@ export class ParkingsController {
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Get all parkings' })
     @ApiOkResponse({ type: [ParkingEntity] })
-    async findPublished(): Promise<ParkingEntity[]> {
-        const parkings = await this.parkingsService.findAll();
+    async findAll(
+        @Query() query: QueryParamParkingDto
+    ): Promise<ParkingEntity[]> {
+        const parkings = await this.parkingsService.findAll(query);
         return parkings.map((parking) => new ParkingEntity(parking));
     }
 
@@ -47,7 +51,7 @@ export class ParkingsController {
     @ApiOperation({ summary: 'Gets the parking with the specified id' })
     @ApiOkResponse({ type: ParkingEntity })
     async findOne(@Param('id') id: number): Promise<ParkingEntity> {
-        return new ParkingEntity(await this.parkingsService.findOne(id));
+        return new ParkingEntity(await this.parkingsService.findById(id));
     }
 
     @Post()
@@ -98,5 +102,29 @@ export class ParkingsController {
     @HttpCode(HttpStatus.NO_CONTENT)
     async remove(@Param('id') id: number): Promise<void> {
         await this.parkingsService.remove(id);
+    }
+
+    @Get('annuals/renovals')
+    @Roles(RoleName.ROOT, RoleName.ADMIN)
+    @ApiBearerAuth()
+    @ApiOperation({
+        summary:
+            'Returns the parkings that would be renoved if the annual renove is executed.'
+    })
+    async getAnnualRenovals(): Promise<ParkingEntity[]> {
+        const parkings = await this.parkingsService.findAnnualRenovals();
+        return parkings.map((parking) => new ParkingEntity(parking));
+    }
+
+    @Post('annuals/renovals')
+    @Roles(RoleName.ROOT, RoleName.ADMIN)
+    @ApiBearerAuth()
+    @ApiOperation({
+        summary:
+            'Renoves the annual parkings, whose end date is not passed but is in this year.'
+    })
+    async doAnnualRenovals(): Promise<ParkingEntity[]> {
+        const parkings = await this.parkingsService.renoveAnnuals();
+        return parkings.map((parking) => new ParkingEntity(parking));
     }
 }

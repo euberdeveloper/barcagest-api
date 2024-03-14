@@ -4,10 +4,15 @@ import {
     NotFoundException,
     UnauthorizedException
 } from '@nestjs/common';
+import { PrismaService } from 'nestjs-prisma';
+import * as bcrypt from 'bcrypt';
+
+import { RoleName } from 'src/roles/entities/role.entity';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'nestjs-prisma';
-import { RoleName } from 'src/roles/entities/role.entity';
+
+import config from 'src/common/config';
 
 @Injectable()
 export class UsersService {
@@ -31,7 +36,7 @@ export class UsersService {
         });
     }
 
-    create(myRole: RoleName, { role, ...user }: CreateUserDto) {
+    async create(myRole: RoleName, { role, ...user }: CreateUserDto) {
         switch (role) {
             case RoleName.ROOT:
                 throw new ForbiddenException();
@@ -41,9 +46,15 @@ export class UsersService {
                 }
         }
 
+        const hashedPassword = await bcrypt.hash(
+            user.password,
+            config.security.hash.rounds
+        );
+
         return this.prisma.user.create({
             data: {
                 ...user,
+                password: hashedPassword,
                 role: { connect: { name: role } }
             },
             include: { role: true }
