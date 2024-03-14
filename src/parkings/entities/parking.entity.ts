@@ -28,8 +28,8 @@ export class ParkingEntity implements Parking {
     @ApiProperty({ nullable: true, type: Date, description: 'Time is ignored' })
     endDate: Date | null;
 
-    @ApiProperty()
-    contractNumber: string;
+    @ApiProperty({ nullable: true, type: String })
+    contractNumber: string | null;
 
     @ApiProperty({
         nullable: true,

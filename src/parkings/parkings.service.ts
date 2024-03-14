@@ -11,6 +11,8 @@ import { ParkingEntity } from './entities/parking.entity';
 export class ParkingsService {
     constructor(private prisma: PrismaService) {}
 
+    private useAutomaticContractNumber = false;
+
     private getYesterdayAtMidnight(): Date {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
@@ -41,7 +43,15 @@ export class ParkingsService {
 
     private getNewContractNumber(
         parking: Pick<ParkingEntity, 'contractNumber' | 'endDate'>
-    ): string {
+    ): string | null {
+        if (!this.useAutomaticContractNumber) {
+            return null;
+        }
+
+        if (!parking.contractNumber) {
+            return null;
+        }
+        
         const contractNumberWithoutYear = parking.contractNumber.split('/')[0];
         const year = parking.endDate?.getFullYear() ?? new Date().getFullYear();
         const twoDigitsYear = (year + 1).toString().slice(-2);
