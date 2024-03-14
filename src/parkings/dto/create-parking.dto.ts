@@ -57,9 +57,9 @@ export class CreateParkingDto {
     endDate?: Date;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     @ApiProperty()
-    contractNumber: string;
+    contractNumber?: string;
 
     @IsBoolean()
     @IsDefined()
