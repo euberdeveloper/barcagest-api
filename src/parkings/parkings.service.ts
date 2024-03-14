@@ -13,11 +13,10 @@ export class ParkingsService {
 
     private useAutomaticContractNumber = false;
 
-    private getYesterdayAtMidnight(): Date {
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        yesterday.setHours(23, 59, 59, 999);
-        return yesterday;
+    private getFirstDayOfTheYearAtBeginning(): Date {
+        const firstDay = new Date(new Date().getFullYear(), 0, 1);
+        firstDay.setHours(0, 0, 0, 0);
+        return firstDay;
     }
     private getLastDayOfTheYearAtMidnight(): Date {
         const lastDay = new Date(new Date().getFullYear(), 11, 31);
@@ -64,7 +63,7 @@ export class ParkingsService {
             startDate: { not: null },
             endDate: {
                 not: null,
-                gt: this.getYesterdayAtMidnight(),
+                gt: this.getFirstDayOfTheYearAtBeginning(),
                 lte: this.getLastDayOfTheYearAtMidnight()
             }
         };
