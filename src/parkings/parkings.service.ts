@@ -51,7 +51,7 @@ export class ParkingsService {
         if (!parking.contractNumber) {
             return null;
         }
-        
+
         const contractNumberWithoutYear = parking.contractNumber.split('/')[0];
         const year = parking.endDate?.getFullYear() ?? new Date().getFullYear();
         const twoDigitsYear = (year + 1).toString().slice(-2);
@@ -89,13 +89,6 @@ export class ParkingsService {
     findById(id: number) {
         return this.prisma.parking.findUniqueOrThrow({
             where: { id },
-            include: { customer: true }
-        });
-    }
-
-    findByContractNumber(contractNumber: string) {
-        return this.prisma.parking.findUniqueOrThrow({
-            where: { contractNumber },
             include: { customer: true }
         });
     }
