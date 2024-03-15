@@ -4,6 +4,9 @@ import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+const rootPassword = process.env.ACCOUNT_ROOT_PASSWORD!;
+const adminPassword = process.env.ACCOUNT_ADMIN_PASSWORD!;
+
 const roundsOfHash = process.env.SECURITY_HASH_ROUNDS
     ? +process.env.SECURITY_HASH_ROUNDS
     : 10;
@@ -50,21 +53,31 @@ async function addUsers() {
     const usersBodies: UpsertUserArgs[] = [
         {
             where: { email: 'euberdeveloper+barcagest@gmail.com' },
-            update: {},
+            update: {
+                email: 'euberdeveloper+barcagest@gmail.com',
+                fullname: 'Eugenio Berretta',
+                password: await hashPassword(rootPassword),
+                roleId: rootRole.id
+            },
             create: {
                 email: 'euberdeveloper+barcagest@gmail.com',
                 fullname: 'Eugenio Berretta',
-                password: await hashPassword('password'),
+                password: await hashPassword(rootPassword),
                 roleId: rootRole.id
             }
         },
         {
             where: { email: 'euberdeveloper+barcagestadmin@gmail.com' },
-            update: {},
+            update: {
+                email: 'euberdeveloper+barcagestadmin@gmail.com',
+                fullname: 'Eubero Euberis',
+                password: await hashPassword(adminPassword),
+                roleId: adminRole.id
+            },
             create: {
                 email: 'euberdeveloper+barcagestadmin@gmail.com',
                 fullname: 'Eubero Euberis',
-                password: await hashPassword('password'),
+                password: await hashPassword(adminPassword),
                 roleId: adminRole.id
             }
         }
@@ -135,7 +148,7 @@ async function addCustomers() {
     return customers;
 }
 
-async function addParkings() {
+async function _addParkings() {
     const customers = await addCustomers();
 
     type CreateParkingArgs = Parameters<typeof prisma.parking.create>[0];
@@ -201,7 +214,7 @@ async function addParkings() {
 
 async function main() {
     await addUsers();
-    await addParkings();
+    // await _addParkings();
 }
 
 main()
