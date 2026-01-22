@@ -18,6 +18,6 @@ async function bootstrap() {
     setupSerialization(app);
     setupPrettyJson(app);
     setupErrorsHandler(app);
-    await app.listen(3000);
+    await app.listen(process.env.PORT ? +process.env.PORT : 3000);
 }
 bootstrap();
