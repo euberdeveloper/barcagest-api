@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Parking, Prisma } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import { CustomerEntity } from 'src/customers/entities/customer.entity';
+import { CustomerEntity } from '../../customers/entities/customer.entity';
 
 export class ParkingEntity implements Parking {
     @ApiProperty()

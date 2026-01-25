@@ -3,7 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'nestjs-prisma';
 import * as bcrypt from 'bcrypt';
 
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from '../users/entities/user.entity';
+
 
 import { JwtBody, JwtPayload } from './interfaces/jwt-payload.interface';
 

@@ -7,7 +7,7 @@ import {
     IsStrongPassword,
     MaxLength
 } from 'class-validator';
-import { RoleName } from 'src/roles/entities/role.entity';
+import { RoleName } from '../../roles/entities/role.entity';
 
 export class CreateUserDto {
     @IsString()
