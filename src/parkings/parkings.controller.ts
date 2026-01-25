@@ -26,8 +26,8 @@ import { ReplaceParkingDto } from './dto/replace-parking.dto';
 import { ParkingEntity } from './entities/parking.entity';
 
 import { ParkingsService } from './parkings.service';
-import { RoleName } from 'src/roles/entities/role.entity';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RoleName } from '../roles/entities/role.entity';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { QueryParamParkingDto } from './dto/query-param-parking.dto';
 
 @Controller('parkings')

@@ -17,11 +17,11 @@ import {
     ApiTags
 } from '@nestjs/swagger';
 
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { RoleName } from 'src/roles/entities/role.entity';
-import { Me } from 'src/auth/decorators/me.decorator';
-import { IsMe } from 'src/decorators/is-me.decorator';
-import { Role } from 'src/decorators/role';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RoleName } from '../roles/entities/role.entity';
+import { Me } from '../auth/decorators/me.decorator';
+import { IsMe } from '../decorators/is-me.decorator';
+import { Role } from '../decorators/role';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';

@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { Observable } from 'rxjs';
 
-import constants from 'src/common/constants';
+import constants from '../../common/constants';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

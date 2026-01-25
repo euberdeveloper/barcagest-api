@@ -2,9 +2,9 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 
-import { RoleName } from 'src/roles/entities/role.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
-import constants from 'src/common/constants';
+import { RoleName } from '../../roles/entities/role.entity';
+import { UserEntity } from '../../users/entities/user.entity';
+import constants from '../../common/constants';
 
 import { RolesCohesistance } from '../decorators/me.decorator';
 

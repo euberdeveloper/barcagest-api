@@ -26,11 +26,11 @@ import { ReplaceCustomerDto } from './dto/replace-customer.dto';
 import { CustomerEntity } from './entities/customer.entity';
 
 import { CustomersService } from './customers.service';
-import { RoleName } from 'src/roles/entities/role.entity';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { RoleName } from '../roles/entities/role.entity';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import { QueryParamCustomersDto } from './dto/query-param-customer.dto';
-import { ParkingEntity } from 'src/parkings/entities/parking.entity';
+import { ParkingEntity } from '../parkings/entities/parking.entity';
 
 @Controller('customers')
 @ApiTags('customers')

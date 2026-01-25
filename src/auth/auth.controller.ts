@@ -11,8 +11,8 @@ import { LoginDto } from './dto/login.dto';
 import { AuthEntity } from './entities/auth.entity';
 import { LocalAuthGuard } from './guards/local.guard';
 
-import { User } from 'src/decorators/user.decorator';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { User } from '../decorators/user.decorator';
+import { UserEntity } from '../users/entities/user.entity';
 import { Public } from './decorators/public.decorator';
 
 @Controller('auth')

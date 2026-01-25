@@ -22,7 +22,7 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { ReplaceRoleDto } from './dto/replace-role.dto';
 import { RoleEntity, RoleName } from './entities/role.entity';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('roles')
 @Controller('roles')
